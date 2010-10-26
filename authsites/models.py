@@ -18,7 +18,7 @@ class UserSite(models.Model):
     site = models.ForeignKey(Site, related_name='siteusers')
 
 class ContactSite(models.Model):
-    contact = models.ForeignKey(User, related_name='contactsites')
+    contact = models.ForeignKey(Contact, related_name='contactsites')
     site = models.ForeignKey(Site, related_name='sitecontacts')
     
 class GroupSiteManager(models.Manager):
