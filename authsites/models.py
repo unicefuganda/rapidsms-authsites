@@ -1,6 +1,6 @@
 from django.db import models
 
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, UserManager
 from django.contrib.auth.models import Group
 from django.contrib.sites.models import Site
 from django.conf import settings
@@ -28,7 +28,7 @@ class GroupSiteManager(models.Manager):
         else:
             return super(GroupSiteManager, self).get_query_set()
 
-class UserSiteManager(models.Manager):
+class UserSiteManager(UserManager):
     def get_query_set(self):
         if settings.SITE_ID:
             return super(UserSiteManager, self).get_query_set().filter(pk__in=UserSite.objects.filter(site__pk=settings.SITE_ID).values_list('user__pk', flat=True))
