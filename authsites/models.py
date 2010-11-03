@@ -53,11 +53,11 @@ c_mgr.contribute_to_class(Contact, 'objects')
 
 def sites_postsave_handler(sender, **kwargs):
     if settings.SITE_ID:
-        if (sender == Contact):
+        if (sender == Contact and kwargs['created']):
             ContactSite.objects.create(contact = kwargs['instance'], site=Site.objects.get_current())
-        elif (sender == User):
+        elif (sender == User and kwargs['created']):
             UserSite.objects.create(user = kwargs['instance'], site=Site.objects.get_current())
-        elif (sender == Group): 
+        elif (sender == Group and kwargs['created']):
             GroupSite.objects.create(group = kwargs['instance'], site=Site.objects.get_current())
 
 post_save.connect(sites_postsave_handler, weak=True)
