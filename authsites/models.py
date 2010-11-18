@@ -65,7 +65,7 @@ class ContactSiteManager(models.Manager):
 class MessageSiteManager(models.Manager):
     def get_query_set(self):
         if settings.SITE_ID:
-            return super(MessageSiteManager, self).get_query_set().filter(pk__in=Site.objects.get_current().sitesmessages.all().values_list('message__pk', flat=True))
+            return super(MessageSiteManager, self).get_query_set().filter(pk__in=Site.objects.get_current().sitemessages.all().values_list('message__pk', flat=True))
         else:
             return super(MessageSiteManager, self).get_query_set()
 
