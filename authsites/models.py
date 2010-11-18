@@ -95,7 +95,7 @@ def sites_postsave_handler(sender, **kwargs):
 #        elif (sender == Connection and kwargs['created']):
 #            ConnectionSite.objects.create(connection = kwargs['instance'], site=Site.objects.get_current())
         elif (sender == Message and kwargs['created']):
-            MessageSite.objects.create(group = kwargs['instance'], site=Site.objects.get_current())
+            MessageSite.objects.create(message = kwargs['instance'], site=Site.objects.get_current())
 #
 
 post_save.connect(sites_postsave_handler, weak=True)
