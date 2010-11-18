@@ -37,21 +37,21 @@ class MessageSite(models.Model):
 class GroupSiteManager(models.Manager):
     def get_query_set(self):
         if settings.SITE_ID:
-            return super(GroupSiteManager, self).get_query_set().filter(pk__in=Site.objects.get_current().sitegroups.all())
+            return super(GroupSiteManager, self).get_query_set().filter(pk__in=Site.objects.get_current().sitegroups.all().values_list('group__pk', flat=True))
         else:
             return super(GroupSiteManager, self).get_query_set()
 
 class UserSiteManager(UserManager):
     def get_query_set(self):
         if settings.SITE_ID:
-            return super(UserSiteManager, self).get_query_set().filter(pk__in=Site.objects.get_current().siteusers.all())
+            return super(UserSiteManager, self).get_query_set().filter(pk__in=Site.objects.get_current().siteusers.all().values_list('user__pk', flat=True))
         else:
             return super(UserSiteManager, self).get_query_set()
 
 class ContactSiteManager(models.Manager):
     def get_query_set(self):
         if settings.SITE_ID:
-            return super(ContactSiteManager, self).get_query_set().filter(pk__in=Site.objects.get_current().sitecontacts.all())
+            return super(ContactSiteManager, self).get_query_set().filter(pk__in=Site.objects.get_current().sitecontacts.all().values_list('contact__pk', flat=True))
         else:
             return super(ContactSiteManager, self).get_query_set()
 
@@ -65,7 +65,7 @@ class ContactSiteManager(models.Manager):
 class MessageSiteManager(models.Manager):
     def get_query_set(self):
         if settings.SITE_ID:
-            return super(MessageSiteManager, self).get_query_set().filter(pk__in=Site.objects.get_current().messageconnections.all())
+            return super(MessageSiteManager, self).get_query_set().filter(pk__in=Site.objects.get_current().sitesmessages.all().values_list('message__pk', flat=True))
         else:
             return super(MessageSiteManager, self).get_query_set()
 
