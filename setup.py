@@ -5,7 +5,7 @@ setup(
     version='0.1',
     license="BSD",
 
-    requires = ["rapidsms"],
+    install_requires = ["rapidsms"],
 
     description='An extension for associating django Users and Groups, as well as RapidSMS Contacts and Messages, with a particular site (without modifying the existing models).',
     long_description=open('README.rst').read(),
