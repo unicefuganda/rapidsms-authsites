@@ -6,7 +6,7 @@ from django.contrib.sites.models import Site
 from django.conf import settings
 
 from rapidsms.models import Contact, Connection
-from rapidsms_httprouter.models import Message
+from rapidsms_httprouter.models import Message, ForUpdateManager
 
 from django.db.models.signals import post_save
 
@@ -62,7 +62,7 @@ class ContactSiteManager(models.Manager):
 #        else:
 #            return super(ConnectionSiteManager, self).get_query_set()
 #
-class MessageSiteManager(models.Manager):
+class MessageSiteManager(ForUpdateManager):
     def get_query_set(self):
         if settings.SITE_ID:
             return super(MessageSiteManager, self).get_query_set().filter(pk__in=Site.objects.get_current().sitemessages.all().values_list('message__pk', flat=True))
