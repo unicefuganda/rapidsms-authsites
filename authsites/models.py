@@ -7,7 +7,7 @@ from django.conf import settings
 
 from rapidsms.models import Contact, Connection
 from rapidsms_httprouter.models import Message, ForUpdateManager
-from uganda_common.managers import BulkInsertManager
+from rapidsms_httprouter.managers import BulkInsertManager
 
 from django.db.models.signals import post_save
 
