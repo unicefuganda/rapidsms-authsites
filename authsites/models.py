@@ -26,7 +26,7 @@ class ContactSite(models.Model):
 class MessageSite(models.Model):
     message = models.ForeignKey(Message, related_name='messagesites')
     site = models.ForeignKey(Site, related_name='sitemessages')
-
+    objects = models.Manager()
     bulk = BulkInsertManager()
     
 #class ConnectionSite(models.Model):
