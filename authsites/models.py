@@ -7,6 +7,7 @@ from django.conf import settings
 
 from rapidsms.models import Contact, Connection
 from rapidsms_httprouter.models import Message, ForUpdateManager
+from uganda_common.managers import BulkInsertManager
 
 from django.db.models.signals import post_save
 
@@ -25,6 +26,8 @@ class ContactSite(models.Model):
 class MessageSite(models.Model):
     message = models.ForeignKey(Message, related_name='messagesites')
     site = models.ForeignKey(Site, related_name='sitemessages')
+
+    bulk = BulkInsertManager()
     
 #class ConnectionSite(models.Model):
 #    connection = models.ForeignKey(Connection, related_name='connectionsites')
