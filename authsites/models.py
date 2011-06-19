@@ -29,6 +29,14 @@ class MessageSite(models.Model):
     objects = models.Manager()
     bulk = BulkInsertManager()
     
+    @classmethod
+    def add_all(cls, messages):
+        for m in messages:
+            MessageSite.bulk.bulk_insert(send_pre_save=False,
+                                         message=m,
+                                         site=Site.objects.get_current())
+        MessageSite.bulk.bulk_insert_commit(send_post_save=False,autoclobber=True)
+
 #class ConnectionSite(models.Model):
 #    connection = models.ForeignKey(Connection, related_name='connectionsites')
 #    site = models.ForeignKey(Site, related_name='siteconnections')
