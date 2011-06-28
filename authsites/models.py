@@ -22,6 +22,7 @@ class UserSite(models.Model):
 class ContactSite(models.Model):
     contact = models.ForeignKey(Contact, related_name='contactsites')
     site = models.ForeignKey(Site, related_name='sitecontacts')
+    objects = models.Manager()
     bulk = BulkInsertManager()
 
     @classmethod
