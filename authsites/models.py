@@ -22,6 +22,15 @@ class UserSite(models.Model):
 class ContactSite(models.Model):
     contact = models.ForeignKey(Contact, related_name='contactsites')
     site = models.ForeignKey(Site, related_name='sitecontacts')
+    bulk = BulkInsertManager()
+
+    @classmethod
+    def add_all(cls, contacts):
+        for c in contacts:
+            ContactSite.bulk.bulk_insert(send_pre_save=False,
+                                         contact=c,
+                                         site=Site.objects.get_current())
+        ContactSite.bulk.bulk_insert_commit(send_post_save=False,autoclobber=True)
 
 class MessageSite(models.Model):
     message = models.ForeignKey(Message, related_name='messagesites')
@@ -82,21 +91,25 @@ class MessageSiteManager(ForUpdateManager):
 
 gs_mgr = GroupSiteManager()
 gs_mgr.contribute_to_class(Group, 'objects')
+models.Manager().contribute_to_class(Group, 'allsites')
 
 us_mgr = UserSiteManager()
 us_mgr.contribute_to_class(User, 'objects')
+models.Manager().contribute_to_class(User, 'allsites')
 
 c_mgr = ContactSiteManager()
 c_mgr.contribute_to_class(Contact, 'objects')
+models.Manager().contribute_to_class(Contact, 'allsites')
 
 #c_mgr = ConnectionSiteManager()
 #c_mgr.contribute_to_class(Connection, 'objects')
 #
 c_mgr = MessageSiteManager()
 c_mgr.contribute_to_class(Message, 'objects')
+models.Manager().contribute_to_class(Message, 'allsites')
 
 def sites_postsave_handler(sender, **kwargs):
-    if settings.SITE_ID:
+    if 'django.contrib.sites' in settings.INSTALLED_APPS:
         if (sender == Contact and kwargs['created']):
             ContactSite.objects.create(contact = kwargs['instance'], site=Site.objects.get_current())
         elif (sender == User and kwargs['created']):
