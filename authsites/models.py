@@ -31,21 +31,21 @@ class ContactSite(models.Model):
             ContactSite.bulk.bulk_insert(send_pre_save=False,
                                          contact=c,
                                          site=Site.objects.get_current())
-        ContactSite.bulk.bulk_insert_commit(send_post_save=False,autoclobber=True)
+        ContactSite.bulk.bulk_insert_commit(send_post_save=False, autoclobber=True)
 
 class MessageSite(models.Model):
     message = models.ForeignKey(Message, related_name='messagesites')
     site = models.ForeignKey(Site, related_name='sitemessages')
     objects = models.Manager()
     bulk = BulkInsertManager()
-    
+
     @classmethod
     def add_all(cls, messages):
         for m in messages:
             MessageSite.bulk.bulk_insert(send_pre_save=False,
                                          message=m,
                                          site=Site.objects.get_current())
-        MessageSite.bulk.bulk_insert_commit(send_post_save=False,autoclobber=True)
+        MessageSite.bulk.bulk_insert_commit(send_post_save=False, autoclobber=True)
 
 #class ConnectionSite(models.Model):
 #    connection = models.ForeignKey(Connection, related_name='connectionsites')
@@ -111,16 +111,16 @@ models.Manager().contribute_to_class(Message, 'allsites')
 
 def sites_postsave_handler(sender, **kwargs):
     if 'django.contrib.sites' in settings.INSTALLED_APPS:
-        if (sender == Contact and kwargs['created']):
-            ContactSite.objects.create(contact = kwargs['instance'], site=Site.objects.get_current())
-        elif (sender == User and kwargs['created']):
-            UserSite.objects.create(user = kwargs['instance'], site=Site.objects.get_current())
-        elif (sender == Group and kwargs['created']):
-            GroupSite.objects.create(group = kwargs['instance'], site=Site.objects.get_current())
+        if ((sender == Contact or sender in Contact.__subclasses__()) and kwargs['created']):
+            ContactSite.objects.create(contact=kwargs['instance'], site=Site.objects.get_current())
+        elif ((sender == User or sender in User.__subclasses__()) and kwargs['created']):
+            UserSite.objects.create(user=kwargs['instance'], site=Site.objects.get_current())
+        elif ((sender == Group or sender in Group.__subclasses__()) and kwargs['created']):
+            GroupSite.objects.create(group=kwargs['instance'], site=Site.objects.get_current())
 #        elif (sender == Connection and kwargs['created']):
 #            ConnectionSite.objects.create(connection = kwargs['instance'], site=Site.objects.get_current())
-        elif (sender == Message and kwargs['created']):
-            MessageSite.objects.create(message = kwargs['instance'], site=Site.objects.get_current())
+        elif ((sender == Message or sender in Message.__subclasses__()) and kwargs['created']):
+            MessageSite.objects.create(message=kwargs['instance'], site=Site.objects.get_current())
 #
 
 post_save.connect(sites_postsave_handler, weak=True)
